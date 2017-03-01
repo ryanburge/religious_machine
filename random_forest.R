@@ -1,4 +1,25 @@
+install.packages("rattle")
+install.packages("rpart.plot")
+install.packages("RColorBrewer")
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
+library(car)
 library(dplyr)
+
+
+gss_reltrad_2000_2014 <- read_dta("D:/gss_reltrad_2000_2014.dta")
+gss$male <- recode(gss$sex, "1=1; else=0")
+gss$white <- recode(gss$race, "1=1; else=0")
+gss$coldeg <- recode(gss$educ, "16:20 =1; else=0")
+gss$male <- recode(gss$sex, "1=1; else=0")
+gss$white <- recode(gss$race, "1=1; else=0")
+gss$coldeg <- recode(gss$educ, "16:20 =1; else=0")
+gss$prayschool <- recode(gss$prayer, "1=1; else=0")
+gss$literal <- recode(gss$bible, "1=1; else=0")
+gss$repubid <- recode(gss$partyid, "7=3")
+
+
 
 df <- select(gss, evangelical, abany, attend, prayschool, literal, male, white, coldeg, repubid, childs, age)
 
@@ -25,7 +46,7 @@ tree <- rpart(evangelical ~., train, method = "class")
 fancyRpartPlot(tree)
 
 
-fit <- randomForest(as.factor(evangelical) ~  attend + prayschool + literal + male + white +
+fit <- randomForest(as.factor(evangelical) ~ attend + prayschool + literal + male + white +
                       coldeg + repubid +  age,
                     data=train, 
                     importance=TRUE, 
